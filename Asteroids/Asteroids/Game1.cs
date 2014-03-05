@@ -16,9 +16,11 @@ namespace Asteroids
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private int WIDTH, HEIGHT;
+        private int WIDTH, HEIGHT, rockCount;
 
         Ship ship;
+
+        Rock[] rocks;
         
         public Game1()
         {
@@ -28,9 +30,9 @@ namespace Asteroids
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             WIDTH = GraphicsDevice.Viewport.Width;
             HEIGHT = GraphicsDevice.Viewport.Height;
+            rockCount = 10;
             
             base.Initialize();
         }
@@ -40,6 +42,12 @@ namespace Asteroids
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             ship = new Ship(Content, WIDTH, HEIGHT);
+            rocks = new Rock[rockCount];
+
+            for (int i = 0; i < rockCount; i++)
+            {
+                rocks[i] = new Rock(Content, WIDTH, HEIGHT);
+            }
         }
 
         protected override void UnloadContent()
@@ -51,6 +59,11 @@ namespace Asteroids
         {
             ship.Update();
 
+            foreach (Rock rock in rocks)
+            {
+                rock.Update();
+            }
+
             base.Update(gameTime);
         }
 
@@ -61,6 +74,11 @@ namespace Asteroids
             spriteBatch.Begin();
 
             ship.Draw(spriteBatch);
+
+            foreach (Rock rock in rocks)
+            {
+                rock.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 
