@@ -15,10 +15,10 @@ namespace Asteroids
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private Texture2D shipSprite;
-        private Vector2 shipPos = new Vector2();
-        private Vector2 shipV = new Vector2();
+
         private int WIDTH, HEIGHT;
+
+        Ship ship;
         
         public Game1()
         {
@@ -31,8 +31,6 @@ namespace Asteroids
             // TODO: Add your initialization logic here
             WIDTH = GraphicsDevice.Viewport.Width;
             HEIGHT = GraphicsDevice.Viewport.Height;
-
-            shipV = new Vector2(0, 0);
             
             base.Initialize();
         }
@@ -40,8 +38,8 @@ namespace Asteroids
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            shipSprite = Content.Load<Texture2D>("medspeedster");
-            shipPos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
+
+            ship = new Ship(Content, WIDTH, HEIGHT);
         }
 
         protected override void UnloadContent()
@@ -51,71 +49,21 @@ namespace Asteroids
 
         protected override void Update(GameTime gameTime)
         {
-            
+            ship.Update();
 
-            KeyboardState keyboardState;
-            keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Right))
-            {
-                shipV.X += 0.1f;
-            }
-            if (keyboardState.IsKeyDown(Keys.Left))
-            {
-                shipV.X -= 0.1f;
-            }
-            shipPos.X += shipV.X;
-
-            
-
-
-            if (keyboardState.IsKeyDown(Keys.Up))
-            {
-                shipV.Y -= 0.1f;
-            }
-            if (keyboardState.IsKeyDown(Keys.Down))
-            {
-                shipV.Y += 0.1f;
-            }
-            shipPos.Y += shipV.Y;
-
-            //what happens when the ship goes to the left edge
-            if (shipPos.X + shipSprite.Width < 0)
-            {
-                shipPos.X = WIDTH;
-            }
-
-            //what happens when the ship goes to the right edge
-            if (shipPos.X > WIDTH)
-            {
-                shipPos.X = 0 - shipSprite.Width;
-            }
-
-            //what happens when the ship goes to the top edge
-            if (shipPos.Y + shipSprite.Height < 0)
-            {
-                shipPos.Y = HEIGHT;
-            }
-
-            //what happens when the ship goes to the bottom edge
-            if (shipPos.Y > HEIGHT)
-            {
-                shipPos.Y = 0 - shipSprite.Height;
-            }
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(shipSprite, shipPos, Color.White);
+
+            ship.Draw(spriteBatch);
+
             spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }
