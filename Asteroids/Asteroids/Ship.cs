@@ -86,7 +86,7 @@ namespace Asteroids
             }
         }
 
-        public void Update()
+        public void Update(Edges edges)
         {
             KeyboardState keyboardState;
             keyboardState = Keyboard.GetState();
@@ -116,29 +116,7 @@ namespace Asteroids
 
             pos.Y += vel.Y;
 
-            //what happens when the ship goes to the left edge
-            if (pos.X + sprite.Width / 2 < 0)
-            {
-                pos.X = screenWidth + sprite.Width / 2;
-            }
-
-            //what happens when the ship goes to the right edge
-            if (pos.X - sprite.Width / 2 > screenWidth)
-            {
-                pos.X = 0 - sprite.Width / 2;
-            }
-
-            //what happens when the ship goes to the top edge
-            if (pos.Y + sprite.Height / 2 < 0)
-            {
-                pos.Y = screenHeight + sprite.Height / 2;
-            }
-
-            //what happens when the ship goes to the bottom edge
-            if (pos.Y - sprite.Height / 2 > screenHeight)
-            {
-                pos.Y = 0 - sprite.Height / 2;
-            }
+            pos = edges.travelEdges(sprite, pos, screenWidth, screenHeight);
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -44,9 +44,11 @@ namespace Asteroids
             ship = new Ship(Content, WIDTH, HEIGHT);
             rocks = new Rock[rockCount];
 
+            Random random = new Random();
+
             for (int i = 0; i < rockCount; i++)
             {
-                rocks[i] = new Rock(Content, WIDTH, HEIGHT);
+                rocks[i] = new Rock(Content, WIDTH, HEIGHT, random);
             }
         }
 
@@ -57,11 +59,13 @@ namespace Asteroids
 
         protected override void Update(GameTime gameTime)
         {
-            ship.Update();
+            Edges edges = new Edges();
+            
+            ship.Update(edges);
 
             foreach (Rock rock in rocks)
             {
-                rock.Update();
+                rock.Update(edges);
             }
 
             base.Update(gameTime);

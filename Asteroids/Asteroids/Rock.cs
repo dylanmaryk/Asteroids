@@ -18,12 +18,10 @@ namespace Asteroids
 
         private bool rotRight;
 
-        private int xVel, yVel;
+        private int xVel, yVel, screenWidth, screenHeight;
 
-        public Rock(ContentManager content, int WIDTH, int HEIGHT)
+        public Rock(ContentManager content, int WIDTH, int HEIGHT, Random random)
         {
-            Random random = new Random();
-            
             sprite = content.Load<Texture2D>("medspeedster");
 
             pos = new Vector2(random.Next(0, WIDTH), random.Next(0, HEIGHT));
@@ -40,9 +38,12 @@ namespace Asteroids
 
             xVel = random.Next(-3, 3);
             yVel = random.Next(-3, 3);
+
+            screenWidth = WIDTH;
+            screenHeight = HEIGHT;
         }
 
-        public void Update()
+        public void Update(Edges edges)
         {
             pos.X += xVel;
             pos.Y += yVel;
@@ -55,6 +56,8 @@ namespace Asteroids
             {
                 rot -= 0.1f;
             }
+
+            pos = edges.travelEdges(sprite, pos, screenWidth, screenHeight);
         }
 
         public void Draw(SpriteBatch spriteBatch)
