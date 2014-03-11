@@ -22,7 +22,7 @@ namespace Asteroids
 
         public Rock(ContentManager content, int WIDTH, int HEIGHT, Random random)
         {
-            sprite = content.Load<Texture2D>("medspeedster");
+            sprite = content.Load<Texture2D>("asteroidBig01");
 
             pos = new Vector2(random.Next(0, WIDTH), random.Next(0, HEIGHT));
             center = new Vector2(sprite.Width / 2, sprite.Height / 2);
@@ -36,8 +36,8 @@ namespace Asteroids
                 rotRight = false;
             }
 
-            xVel = random.Next(-3, 3);
-            yVel = random.Next(-3, 3);
+            xVel = random.Next(-1, 1);
+            yVel = random.Next(-1, 1);
 
             screenWidth = WIDTH;
             screenHeight = HEIGHT;

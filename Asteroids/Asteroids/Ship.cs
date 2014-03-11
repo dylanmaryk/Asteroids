@@ -17,7 +17,8 @@ namespace Asteroids
     class Ship
     {
         private Texture2D sprite;
-
+        private float accelerate = 0.4f;
+        private float deccelerate = 0.2f;
         private Vector2 pos, vel, center;
 
         private float rot;
@@ -38,28 +39,27 @@ namespace Asteroids
 
         public void SpeedUp()
         {
-            vel += new Vector2(
-                (float)(Math.Cos(rot - Math.PI / 2) * 0.1f), 
-                (float)((Math.Sin(rot - Math.PI / 2) * 0.1f)));
+            vel.X = vel.X + (float)(Math.Cos(rot - Math.PI / 2) * accelerate);
+            vel.Y = vel.Y + (float)(Math.Sin(rot - Math.PI / 2) * accelerate);
 	 
-    	    if (vel.X > 9.0f)
+    	    if (vel.X > 6.0f)
     	    {
-    	        vel.X = 9.0f;
+    	        vel.X = 6.0f;
     	    }
 
-    	    if (vel.X < -9.0f)
+    	    if (vel.X < -6.0f)
     	    {
-    	        vel.X = -9.0f;
+    	        vel.X = -6.0f;
     	    }
 
-    	    if (vel.Y > 9.0f)
+    	    if (vel.Y > 6.0f)
     	    {
-    	        vel.Y = 9.0f;
+    	        vel.Y = 6.0f;
     	    }
 
-    	    if (vel.Y < -9.0f)
+    	    if (vel.Y < -6.0f)
     	    {
-    	        vel.Y = -9.0f;
+    	        vel.Y = -6.0f;
     	    }
         }
 
@@ -67,22 +67,22 @@ namespace Asteroids
         {
             if (vel.X < 0)
             {
-                vel = new Vector2(vel.X + 0.02f, vel.Y);
+                vel = new Vector2(vel.X + deccelerate, vel.Y);
             }
 
             if (vel.X > 0)
             {
-                vel = new Vector2(vel.X - 0.02f, vel.Y);
+                vel = new Vector2(vel.X - deccelerate, vel.Y);
             }
 
             if (vel.Y < 0)
             {
-                vel = new Vector2(vel.X, vel.Y + 0.02f);
+                vel = new Vector2(vel.X, vel.Y + deccelerate);
             }
 
             if (vel.Y > 0)
             {
-                vel = new Vector2(vel.X, vel.Y - 0.02f);
+                vel = new Vector2(vel.X, vel.Y - deccelerate);
             }
         }
 
@@ -93,27 +93,25 @@ namespace Asteroids
 
             if (keyboardState.IsKeyDown(Keys.Right))
             {
-                rot += 0.1f;
+                rot += 0.05f;
             }
 
             if (keyboardState.IsKeyDown(Keys.Left))
             {
-                rot -= 0.1f;
-            }
-
-            pos.X += vel.X;
+                rot -= 0.05f;
+            }         
             
             if (keyboardState.IsKeyDown(Keys.Up))
             {
-                //vel.Y -= 0.1f;
                 SpeedUp();
             }
 
-            if (!keyboardState.IsKeyDown(Keys.Up))
+            if (keyboardState.IsKeyUp(Keys.Up))
             {
                 SpeedDown();
             }
 
+            pos.X += vel.X;
             pos.Y += vel.Y;
 
             pos = edges.travelEdges(sprite, pos, screenWidth, screenHeight);
