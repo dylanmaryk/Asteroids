@@ -19,8 +19,10 @@ namespace Asteroids
         private int WIDTH, HEIGHT, rockCount;
 
         Ship ship;
-
+        KeyboardState oldState;
         Rock[] rocks;
+
+        List<Bullets> bullets = new List<Bullets>();
         
         public Game1()
         {
@@ -59,8 +61,24 @@ namespace Asteroids
             // TODO: Unload any non ContentManager content here
         }
 
+        public void Shoot()
+        {
+            Bullets bull = new Bullets(Content.Load<Texture2D>("bulletTest"));
+            bull.bulletVel = new Vector2((float)Math.Cos(ship.rot), (float)Math.Sin(ship.rot)) * 5f + ship.shipVel ;
+            bull.bulletPos = ship.shipPos + bull.bulletVel * 5;
+
+            if (bullets.Count() < 20)
+            {
+                bullets.Add(bull);
+            }
+
+        }
+
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState newState;
+            newState = Keyboard.GetState();
+
             Edges edges = new Edges();
             
             ship.Update(edges);
@@ -69,7 +87,12 @@ namespace Asteroids
             {
                 rock.Update(edges);
             }
+            if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
+            {
+                Shoot();
+            }
 
+            oldState = newState;
             base.Update(gameTime);
         }
 
@@ -78,14 +101,15 @@ namespace Asteroids
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-
-            ship.Draw(spriteBatch);
-
             foreach (Rock rock in rocks)
             {
                 rock.Draw(spriteBatch);
             }
-
+            foreach (Bullets bull in bullets)
+            {
+                bull.Draw(spriteBatch);
+            }
+            ship.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

@@ -16,110 +16,124 @@ namespace Asteroids
 {
     class Ship
     {
-        private Texture2D sprite;
+        //ship stuff
+        private Texture2D shipSprite;
         private float accelerate = 0.4f;
-        private float deccelerate = 0.2f;
-        private Vector2 pos, vel, center;
+        private float deccelerate = 0.02f;
+        public Vector2 shipPos, shipVel, center;
+        public float rot;
 
-        private float rot;
+        //bullet stuff
+        private List<Bullets> bullets = new List<Bullets>();
+        
 
         private int screenWidth, screenHeight;
 
         public Ship(ContentManager content, int WIDTH, int HEIGHT)
         {
-            sprite = content.Load<Texture2D>("shipDebug"); //medspeedster
+            shipSprite = content.Load<Texture2D>("shipDebug"); //medspeedster
             rot = 0.0f;
-            pos = new Vector2((WIDTH - sprite.Width) / 2, (HEIGHT - sprite.Height) / 2);
-            vel = new Vector2(0, 0);
-            center = new Vector2(sprite.Width / 2, sprite.Height / 2);
+            shipPos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
+            shipVel = new Vector2(0, 0);
+            center = new Vector2(shipSprite.Width / 2, shipSprite.Height / 2);
 
             screenWidth = WIDTH;
             screenHeight = HEIGHT;
+
         }
 
-        public void SpeedUp()
+        public void Accelerate()
         {
-            vel.X = vel.X + (float)(Math.Cos(rot - Math.PI / 2) * accelerate);
-            vel.Y = vel.Y + (float)(Math.Sin(rot - Math.PI / 2) * accelerate);
+            shipVel.X = shipVel.X + (float)(Math.Cos(rot - Math.PI / 2) * accelerate);
+            shipVel.Y = shipVel.Y + (float)(Math.Sin(rot - Math.PI / 2) * accelerate);
 	 
-    	    if (vel.X > 6.0f)
+    	    if (shipVel.X > 6.0f)
     	    {
-    	        vel.X = 6.0f;
+    	        shipVel.X = 6.0f;
     	    }
 
-    	    if (vel.X < -6.0f)
+    	    if (shipVel.X < -6.0f)
     	    {
-    	        vel.X = -6.0f;
+    	        shipVel.X = -6.0f;
     	    }
 
-    	    if (vel.Y > 6.0f)
+    	    if (shipVel.Y > 6.0f)
     	    {
-    	        vel.Y = 6.0f;
+    	        shipVel.Y = 6.0f;
     	    }
 
-    	    if (vel.Y < -6.0f)
+    	    if (shipVel.Y < -6.0f)
     	    {
-    	        vel.Y = -6.0f;
+    	        shipVel.Y = -6.0f;
     	    }
         }
 
-        public void SpeedDown()
+        public void Deccelerate()
         {
-            if (vel.X < 0)
+            if (shipVel.X < 0)
             {
-                vel = new Vector2(vel.X + deccelerate, vel.Y);
+                shipVel.X = shipVel.X + deccelerate;
             }
 
-            if (vel.X > 0)
+            if (shipVel.X > 0)
             {
-                vel = new Vector2(vel.X - deccelerate, vel.Y);
+                shipVel.X = shipVel.X - deccelerate;
             }
 
-            if (vel.Y < 0)
+            if (shipVel.Y < 0)
             {
-                vel = new Vector2(vel.X, vel.Y + deccelerate);
+                shipVel.Y = shipVel.Y + deccelerate;
             }
 
-            if (vel.Y > 0)
+            if (shipVel.Y > 0)
             {
-                vel = new Vector2(vel.X, vel.Y - deccelerate);
+                shipVel.Y = shipVel.Y - deccelerate;
             }
         }
+
+        
 
         public void Update(Edges edges)
         {
-            KeyboardState keyboardState;
-            keyboardState = Keyboard.GetState();
+            KeyboardState newState, oldState;
+            newState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Right))
+            shipPos.X += shipVel.X;
+            shipPos.Y += shipVel.Y;
+            shipPos = edges.travelEdges(shipSprite, shipPos, screenWidth, screenHeight);
+
+            if (newState.IsKeyDown(Keys.Right))
             {
                 rot += 0.05f;
             }
 
-            if (keyboardState.IsKeyDown(Keys.Left))
+            if (newState.IsKeyDown(Keys.Left))
             {
                 rot -= 0.05f;
             }         
             
-            if (keyboardState.IsKeyDown(Keys.Up))
+            if (newState.IsKeyDown(Keys.Up))
             {
-                SpeedUp();
+                Accelerate();
             }
 
-            if (keyboardState.IsKeyUp(Keys.Up))
+            if (newState.IsKeyUp(Keys.Up))
             {
-                SpeedDown();
+                Deccelerate();
             }
 
-            pos.X += vel.X;
-            pos.Y += vel.Y;
+            //pause to check variables
+            if (newState.IsKeyDown(Keys.S))
+            {
+                int argh = 0;
+            }
 
-            pos = edges.travelEdges(sprite, pos, screenWidth, screenHeight);
+            oldState = newState;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, pos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(shipSprite, shipPos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
         }
     }
 }
