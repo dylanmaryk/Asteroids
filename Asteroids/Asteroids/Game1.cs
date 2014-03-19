@@ -23,10 +23,9 @@ namespace Asteroids
 
         private List<Bullet> bullets = new List<Bullet>();
 
-        //private Texture2D welcomeSprite;
         private SpriteFont welcomeSprite;
-        private SpriteFont lives;
-        private SpriteFont score;
+        private SpriteFont livesSprite;
+        private SpriteFont scoreSprite;
 
         private String welcomeText;
         private String livesText;
@@ -39,8 +38,11 @@ namespace Asteroids
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+
             Content.RootDirectory = "Content";
+
             IsMouseVisible = true;
+
             // graphics.ToggleFullScreen(); // FULL SCREEEEEEEEEN
             graphics.ApplyChanges();
         }
@@ -51,7 +53,7 @@ namespace Asteroids
             HEIGHT = GraphicsDevice.Viewport.Height;
             rockCount = 10;
 
-            welcomeScreenActive = true; //changed it to make it work
+            welcomeScreenActive = true;
             
             base.Initialize();
         }
@@ -60,10 +62,9 @@ namespace Asteroids
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // welcomeSprite = Content.Load<Texture2D>(""); // Add welcome screen image
             welcomeSprite = Content.Load<SpriteFont>("Courier New");
-            lives = Content.Load<SpriteFont>("Courier New");
-            score = lives;
+            livesSprite = Content.Load<SpriteFont>("Courier New");
+            scoreSprite = livesSprite;
             welcomeText = "Press Enter to start the game";
             livesText = "3";
             scoreText = "0";
@@ -121,16 +122,17 @@ namespace Asteroids
                     rock.Update(edges);
                 }
 
+                foreach (Bullet bull in bullets)
+                {
+                    bull.Update(gameTime);
+                }
+
                 if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
                 {
                     Shoot();
                 }
 
                 oldState = newState;
-            }
-            foreach (Bullet bull in bullets)
-            {
-                bull.Update(gameTime);
             }
 
             base.Update(gameTime);
@@ -146,12 +148,11 @@ namespace Asteroids
             {
                 Vector2 welcomeSize = welcomeSprite.MeasureString(welcomeText);
 
-                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X/2, 0), 0.5f, SpriteEffects.None, 0);
-                // Draw welcome screen
+                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, 0), 0.5f, SpriteEffects.None, 0);
             }
             else
             {
-                Vector2 scoreSize = score.MeasureString(scoreText);
+                Vector2 scoreSize = scoreSprite.MeasureString(scoreText);
                 
                 foreach (Rock rock in rocks)
                 {
@@ -165,9 +166,8 @@ namespace Asteroids
 
                 ship.Draw(spriteBatch);
 
-
-                spriteBatch.DrawString(lives, livesText, new Vector2(20, 20), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
-                spriteBatch.DrawString(score, scoreText, new Vector2(WIDTH - 20, 20), Color.White, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(livesSprite, livesText, new Vector2(20, 20), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(scoreSprite, scoreText, new Vector2(WIDTH - 20, 20), Color.White, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
             }
 
             spriteBatch.End();
