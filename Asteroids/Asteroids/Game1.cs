@@ -25,6 +25,12 @@ namespace Asteroids
 
         private Texture2D welcomeSprite;
 
+        private SpriteFont lives;
+        private SpriteFont score;
+
+        private String livesText;
+        private String scoreText;
+
         private KeyboardState oldState;
 
         private bool welcomeScreenActive;
@@ -54,6 +60,12 @@ namespace Asteroids
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // welcomeSprite = Content.Load<Texture2D>(""); // Add welcome screen image
+
+            lives = Content.Load<SpriteFont>("Courier New");
+            score = lives;
+
+            livesText = "3";
+            scoreText = "0";
 
             ship = new Ship(Content, WIDTH, HEIGHT);
             rocks = new Rock[rockCount];
@@ -131,6 +143,8 @@ namespace Asteroids
             }
             else
             {
+                Vector2 scoreSize = score.MeasureString(scoreText);
+                
                 foreach (Rock rock in rocks)
                 {
                     rock.Draw(spriteBatch);
@@ -142,6 +156,9 @@ namespace Asteroids
                 }
 
                 ship.Draw(spriteBatch);
+
+                spriteBatch.DrawString(lives, livesText, new Vector2(20, 20), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(score, scoreText, new Vector2(WIDTH - 20, 20), Color.White, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
             }
 
             spriteBatch.End();
