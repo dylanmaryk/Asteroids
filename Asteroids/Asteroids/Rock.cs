@@ -22,7 +22,7 @@ namespace Asteroids
 
         public Rock(ContentManager content, int WIDTH, int HEIGHT, Random random)
         {
-            sprite = content.Load<Texture2D>("asteroidBig01");
+            sprite = content.Load<Texture2D>("meteorSmall");
 
             pos = new Vector2(random.Next(0, WIDTH), random.Next(0, HEIGHT));
             center = new Vector2(sprite.Width / 2, sprite.Height / 2);

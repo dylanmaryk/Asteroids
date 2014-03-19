@@ -18,10 +18,12 @@ namespace Asteroids
     {
         // Ship stuff
 
+        private Texture2D shipDrawSprite;
         private Texture2D shipSprite;
+        private Texture2D shipBoostSprite;
 
         private float accelerate = 0.4f;
-        private float deccelerate = 0.02f;
+        private float deccelerate = 0.1f;
 
         public Vector2 shipPos, shipVel, center;
 
@@ -35,8 +37,9 @@ namespace Asteroids
 
         public Ship(ContentManager content, int WIDTH, int HEIGHT)
         {
-            shipSprite = content.Load<Texture2D>("shipDebug"); // medspeedster
-
+            shipSprite = content.Load<Texture2D>("player");
+            shipDrawSprite = content.Load<Texture2D>("player");
+            shipBoostSprite = content.Load<Texture2D>("playerBoost");
             rot = 0.0f;
 
             shipPos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
@@ -107,21 +110,23 @@ namespace Asteroids
 
             if (newState.IsKeyDown(Keys.Right))
             {
-                rot += 0.05f;
+                rot += 0.03f;
             }
 
             if (newState.IsKeyDown(Keys.Left))
             {
-                rot -= 0.05f;
+                rot -= 0.03f;
             }         
             
             if (newState.IsKeyDown(Keys.Up))
             {
+                shipDrawSprite = shipBoostSprite;
                 Accelerate();
             }
 
             if (newState.IsKeyUp(Keys.Up))
             {
+                shipDrawSprite = shipSprite;
                 Decelerate();
             }
 
@@ -136,7 +141,7 @@ namespace Asteroids
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(shipSprite, shipPos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(shipDrawSprite, shipPos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
         }
     }
 }
