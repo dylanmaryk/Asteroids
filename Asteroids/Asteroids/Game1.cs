@@ -18,17 +18,23 @@ namespace Asteroids
 
         private int WIDTH, HEIGHT, rockCount;
 
-        Ship ship;
-        KeyboardState oldState;
-        Rock[] rocks;
+        private Ship ship;
+        private Rock[] rocks;
 
-        List<Bullets> bullets = new List<Bullets>();
+        private List<Bullet> bullets = new List<Bullet>();
+
+        private Texture2D welcomeSprite;
+
+        private KeyboardState oldState;
+
+        private bool welcomeScreenActive;
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";            
-            //graphics.ToggleFullScreen(); //FULLSCREEEEEEEEEN
+            Content.RootDirectory = "Content";
+
+            // graphics.ToggleFullScreen(); // FULL SCREEEEEEEEEN
             graphics.ApplyChanges();
         }
 
@@ -37,6 +43,8 @@ namespace Asteroids
             WIDTH = GraphicsDevice.Viewport.Width;
             HEIGHT = GraphicsDevice.Viewport.Height;
             rockCount = 10;
+
+            welcomeScreenActive = true;
             
             base.Initialize();
         }
@@ -44,6 +52,8 @@ namespace Asteroids
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // welcomeSprite = Content.Load<Texture2D>(""); // Add welcome screen image
 
             ship = new Ship(Content, WIDTH, HEIGHT);
             rocks = new Rock[rockCount];
@@ -63,7 +73,7 @@ namespace Asteroids
 
         public void Shoot()
         {
-            Bullets bull = new Bullets(Content.Load<Texture2D>("bulletTest"));
+            Bullet bull = new Bullet(Content.Load<Texture2D>("bulletTest"));
             bull.bulletVel = new Vector2((float)Math.Cos(ship.rot), (float)Math.Sin(ship.rot)) * 5f + ship.shipVel ;
             bull.bulletPos = ship.shipPos + bull.bulletVel * 5;
 
@@ -76,23 +86,36 @@ namespace Asteroids
 
         protected override void Update(GameTime gameTime)
         {
-            KeyboardState newState;
-            newState = Keyboard.GetState();
-
-            Edges edges = new Edges();
-            
-            ship.Update(edges);
-
-            foreach (Rock rock in rocks)
+            if (welcomeScreenActive)
             {
-                rock.Update(edges);
+                KeyboardState state = Keyboard.GetState();
+
+                if (state.IsKeyDown(Keys.Enter))
+                {
+                    welcomeScreenActive = false;
+                }
             }
-            if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
+            else
             {
-                Shoot();
+                KeyboardState newState = Keyboard.GetState();
+
+                Edges edges = new Edges();
+
+                ship.Update(edges);
+
+                foreach (Rock rock in rocks)
+                {
+                    rock.Update(edges);
+                }
+
+                if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
+                {
+                    Shoot();
+                }
+
+                oldState = newState;
             }
 
-            oldState = newState;
             base.Update(gameTime);
         }
 
@@ -101,15 +124,26 @@ namespace Asteroids
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            foreach (Rock rock in rocks)
+
+            if (welcomeScreenActive)
             {
-                rock.Draw(spriteBatch);
+                // Draw welcome screen
             }
-            foreach (Bullets bull in bullets)
+            else
             {
-                bull.Draw(spriteBatch);
+                foreach (Rock rock in rocks)
+                {
+                    rock.Draw(spriteBatch);
+                }
+
+                foreach (Bullet bull in bullets)
+                {
+                    bull.Draw(spriteBatch);
+                }
+
+                ship.Draw(spriteBatch);
             }
-            ship.Draw(spriteBatch);
+
             spriteBatch.End();
 
             base.Draw(gameTime);

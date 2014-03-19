@@ -8,25 +8,20 @@ using System.Text;
 
 namespace Asteroids
 {
-    class Bullets
+    class Bullet
     {
         public Texture2D bulletSprite;
-        public Vector2 bulletPos;
-        public Vector2 bulletVel;
-        public Vector2 bulletPointing;
+
+        public Vector2 bulletPos, bulletVel, bulletPointing;
         
-        public Bullets(Texture2D sprite)
+        public Bullet(Texture2D sprite)
         {
             bulletSprite = sprite;
         }
-
-
-
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(bulletSprite, bulletPos, null, Color.White, 0f, bulletPointing, 1f, SpriteEffects.None, 1);
         }
-
     }
 }

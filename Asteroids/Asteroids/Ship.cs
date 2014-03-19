@@ -16,30 +16,35 @@ namespace Asteroids
 {
     class Ship
     {
-        //ship stuff
+        // Ship stuff
+
         private Texture2D shipSprite;
+
         private float accelerate = 0.4f;
         private float deccelerate = 0.02f;
+
         public Vector2 shipPos, shipVel, center;
+
         public float rot;
 
-        //bullet stuff
-        private List<Bullets> bullets = new List<Bullets>();
-        
+        // Bullet stuff
 
+        private List<Bullet> bullets = new List<Bullet>();
+        
         private int screenWidth, screenHeight;
 
         public Ship(ContentManager content, int WIDTH, int HEIGHT)
         {
-            shipSprite = content.Load<Texture2D>("shipDebug"); //medspeedster
+            shipSprite = content.Load<Texture2D>("shipDebug"); // medspeedster
+
             rot = 0.0f;
+
             shipPos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
             shipVel = new Vector2(0, 0);
             center = new Vector2(shipSprite.Width / 2, shipSprite.Height / 2);
 
             screenWidth = WIDTH;
             screenHeight = HEIGHT;
-
         }
 
         public void Accelerate()
@@ -68,7 +73,7 @@ namespace Asteroids
     	    }
         }
 
-        public void Deccelerate()
+        public void Decelerate()
         {
             if (shipVel.X < 0)
             {
@@ -90,8 +95,6 @@ namespace Asteroids
                 shipVel.Y = shipVel.Y - deccelerate;
             }
         }
-
-        
 
         public void Update(Edges edges)
         {
@@ -119,10 +122,10 @@ namespace Asteroids
 
             if (newState.IsKeyUp(Keys.Up))
             {
-                Deccelerate();
+                Decelerate();
             }
 
-            //pause to check variables
+            // Pause to check variables
             if (newState.IsKeyDown(Keys.S))
             {
                 int argh = 0;
