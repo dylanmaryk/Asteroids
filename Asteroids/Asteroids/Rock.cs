@@ -10,9 +10,7 @@ namespace Asteroids
 {
     class Rock
     {
-        private Texture2D sprite;
-
-        private Vector2 pos, center;
+        private Vector2 center;
 
         private float rot;
 
@@ -20,12 +18,22 @@ namespace Asteroids
 
         private int xVel, yVel, screenWidth, screenHeight;
 
+        public Texture2D rockSprite;
+
+        public Vector2 pos;
+
         public Rock(ContentManager content, int WIDTH, int HEIGHT, Random random)
         {
-            sprite = content.Load<Texture2D>("meteorSmall");
+            // rockSprite = content.Load<Texture2D>("meteorSmall");
+            rockSprite = content.Load<Texture2D>("donut");
 
-            pos = new Vector2(random.Next(0, WIDTH), random.Next(0, HEIGHT));
-            center = new Vector2(sprite.Width / 2, sprite.Height / 2);
+            do
+            {
+                pos = new Vector2(random.Next(0, WIDTH), random.Next(0, HEIGHT));
+            }
+            while (pos.X > WIDTH / 8 && pos.X < WIDTH * 7 && pos.Y > HEIGHT / 8 && pos.Y < HEIGHT * 7);
+
+            center = new Vector2(rockSprite.Width / 2, rockSprite.Height / 2);
 
             if (random.Next(0, 2) == 0)
             {
@@ -57,12 +65,12 @@ namespace Asteroids
                 rot -= 0.1f;
             }
 
-            pos = edges.travelEdges(sprite, pos, screenWidth, screenHeight);
+            pos = edges.travelEdges(rockSprite, pos, screenWidth, screenHeight);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, pos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(rockSprite, pos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
         }
     }
 }

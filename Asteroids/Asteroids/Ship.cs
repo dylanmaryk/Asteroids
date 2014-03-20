@@ -18,16 +18,18 @@ namespace Asteroids
     {
         // Ship stuff
 
-        private Texture2D shipDrawSprite;
-        private Texture2D shipSprite;
-        private Texture2D shipBoostSprite;
+        private Texture2D shipDrawSprite, shipBoostSprite;
 
         private float accelerate = 0.4f;
         private float deccelerate = 0.1f;
 
-        public Vector2 shipPos, shipVel, center;
+        private Vector2 center;
+
+        public Texture2D shipSprite;
 
         public float rot;
+
+        public Vector2 pos, vel;
 
         // Bullet stuff
 
@@ -37,13 +39,17 @@ namespace Asteroids
 
         public Ship(ContentManager content, int WIDTH, int HEIGHT)
         {
-            shipSprite = content.Load<Texture2D>("player");
-            shipDrawSprite = content.Load<Texture2D>("player");
-            shipBoostSprite = content.Load<Texture2D>("playerBoost");
+            // shipSprite = content.Load<Texture2D>("player");
+            // shipDrawSprite = ShipSprite;
+            // shipBoostSprite = content.Load<Texture2D>("playerBoost");
+            shipSprite = content.Load<Texture2D>("gun");
+            shipDrawSprite = shipSprite;
+            shipBoostSprite = content.Load<Texture2D>("gunMoving");
+
             rot = 0.0f;
 
-            shipPos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
-            shipVel = new Vector2(0, 0);
+            pos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
+            vel = new Vector2(0, 0);
             center = new Vector2(shipSprite.Width / 2, shipSprite.Height / 2);
 
             screenWidth = WIDTH;
@@ -52,50 +58,50 @@ namespace Asteroids
 
         public void Accelerate()
         {
-            shipVel.X = shipVel.X + (float)(Math.Cos(rot - Math.PI / 2) * accelerate);
-            shipVel.Y = shipVel.Y + (float)(Math.Sin(rot - Math.PI / 2) * accelerate);
+            vel.X = vel.X + (float)(Math.Cos(rot - Math.PI / 2) * accelerate);
+            vel.Y = vel.Y + (float)(Math.Sin(rot - Math.PI / 2) * accelerate);
 	 
-    	    if (shipVel.X > 6.0f)
+    	    if (vel.X > 6.0f)
     	    {
-    	        shipVel.X = 6.0f;
+    	        vel.X = 6.0f;
     	    }
 
-    	    if (shipVel.X < -6.0f)
+    	    if (vel.X < -6.0f)
     	    {
-    	        shipVel.X = -6.0f;
+    	        vel.X = -6.0f;
     	    }
 
-    	    if (shipVel.Y > 6.0f)
+    	    if (vel.Y > 6.0f)
     	    {
-    	        shipVel.Y = 6.0f;
+    	        vel.Y = 6.0f;
     	    }
 
-    	    if (shipVel.Y < -6.0f)
+    	    if (vel.Y < -6.0f)
     	    {
-    	        shipVel.Y = -6.0f;
+    	        vel.Y = -6.0f;
     	    }
         }
 
         public void Decelerate()
         {
-            if (shipVel.X < 0)
+            if (vel.X < 0)
             {
-                shipVel.X = shipVel.X + deccelerate;
+                vel.X = vel.X + deccelerate;
             }
 
-            if (shipVel.X > 0)
+            if (vel.X > 0)
             {
-                shipVel.X = shipVel.X - deccelerate;
+                vel.X = vel.X - deccelerate;
             }
 
-            if (shipVel.Y < 0)
+            if (vel.Y < 0)
             {
-                shipVel.Y = shipVel.Y + deccelerate;
+                vel.Y = vel.Y + deccelerate;
             }
 
-            if (shipVel.Y > 0)
+            if (vel.Y > 0)
             {
-                shipVel.Y = shipVel.Y - deccelerate;
+                vel.Y = vel.Y - deccelerate;
             }
         }
 
@@ -104,9 +110,9 @@ namespace Asteroids
             KeyboardState newState, oldState;
             newState = Keyboard.GetState();
 
-            shipPos.X += shipVel.X;
-            shipPos.Y += shipVel.Y;
-            shipPos = edges.travelEdges(shipSprite, shipPos, screenWidth, screenHeight);
+            pos.X += vel.X;
+            pos.Y += vel.Y;
+            pos = edges.travelEdges(shipSprite, pos, screenWidth, screenHeight);
 
             if (newState.IsKeyDown(Keys.Right))
             {
@@ -130,18 +136,12 @@ namespace Asteroids
                 Decelerate();
             }
 
-            // Pause to check variables
-            if (newState.IsKeyDown(Keys.S))
-            {
-                int argh = 0;
-            }
-
             oldState = newState;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(shipDrawSprite, shipPos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
+            spriteBatch.Draw(shipDrawSprite, pos, null, Color.White, rot, center, 1.0f, SpriteEffects.None, 0);
         }
     }
 }

@@ -19,17 +19,13 @@ namespace Asteroids
         private int WIDTH, HEIGHT, rockCount;
 
         private Ship ship;
-        private Rock[] rocks;
 
+        private List<Rock> rocks = new List<Rock>();
         private List<Bullet> bullets = new List<Bullet>();
 
-        private SpriteFont welcomeSprite;
-        private SpriteFont livesSprite;
-        private SpriteFont scoreSprite;
+        private SpriteFont welcomeSprite, livesSprite, scoreSprite;
 
-        private String welcomeText;
-        private String livesText;
-        private String scoreText;
+        private String welcomeText, livesText, scoreText;
 
         private KeyboardState oldState;
 
@@ -63,20 +59,20 @@ namespace Asteroids
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             welcomeSprite = Content.Load<SpriteFont>("Courier New");
-            livesSprite = Content.Load<SpriteFont>("Courier New");
-            scoreSprite = livesSprite;
-            welcomeText = "Press Enter to start the game";
+            livesSprite = welcomeSprite;
+            scoreSprite = welcomeSprite;
+
+            welcomeText = "Press Enter to start the game...";
             livesText = "3";
             scoreText = "0";
 
             ship = new Ship(Content, WIDTH, HEIGHT);
-            rocks = new Rock[rockCount];
 
             Random random = new Random();
 
             for (int i = 0; i < rockCount; i++)
             {
-                rocks[i] = new Rock(Content, WIDTH, HEIGHT, random);
+                rocks.Add(new Rock(Content, WIDTH, HEIGHT, random));
             }
         }
 
@@ -87,15 +83,14 @@ namespace Asteroids
 
         public void Shoot()
         {
-            Bullet bull = new Bullet(Content, ship.shipPos, ship.shipVel, ship.rot);
-            bull.bulletVel = new Vector2((float)Math.Cos(ship.rot), (float)Math.Sin(ship.rot)) * 5f + ship.shipVel ;
-            bull.bulletPos = ship.shipPos + bull.bulletVel * 5;
+            Bullet bull = new Bullet(Content, ship.pos, ship.vel, ship.rot);
+            bull.vel = new Vector2((float)Math.Cos(ship.rot), (float)Math.Sin(ship.rot)) * 5f + ship.vel;
+            bull.pos = ship.pos + bull.vel * 5;
 
             if (bullets.Count() < 20)
             {
                 bullets.Add(bull);
             }
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -117,14 +112,41 @@ namespace Asteroids
 
                 ship.Update(edges);
 
+                List<Rock> rocksToRemove = new List<Rock>();
+
                 foreach (Rock rock in rocks)
                 {
+                    Rectangle rectShip = new Rectangle((int)ship.pos.X, (int)ship.pos.Y, ship.shipSprite.Width, ship.shipSprite.Height);
+                    Rectangle rectRock = new Rectangle((int)rock.pos.X, (int)rock.pos.Y, rock.rockSprite.Width, rock.rockSprite.Height);
+
                     rock.Update(edges);
+
+                    if (rectRock.Intersects(rectShip))
+                    {
+                        int livesInt = Convert.ToInt32(livesText);
+                        livesInt--;
+
+                        livesText = livesInt.ToString();
+                        
+                        rocksToRemove.Add(rock);
+                    }
+
+                    foreach (Bullet bull in bullets)
+                    {
+                        Rectangle rectBull = new Rectangle((int)bull.pos.X, (int)bull.pos.Y, bull.bulletSprite.Width, bull.bulletSprite.Height);
+
+                        bull.Update(gameTime);
+
+                        if (rectBull.Intersects(rectRock))
+                        {
+                            // Change rock sprite to glazed, set to be removed after 1 second, earn a point
+                        }
+                    }
                 }
 
-                foreach (Bullet bull in bullets)
+                foreach (Rock rock in rocksToRemove)
                 {
-                    bull.Update(gameTime);
+                    rocks.Remove(rock);
                 }
 
                 if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
