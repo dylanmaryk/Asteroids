@@ -34,7 +34,7 @@ namespace Asteroids
         private Rectangle backgroundRect1;
         private Rectangle backgroundRect2;
 
-        private SoundEffect shootSound, explodeSound;
+        private SoundEffect shootSound, explodeSound, destroySound;
 
         private KeyboardState oldState;
 
@@ -92,6 +92,7 @@ namespace Asteroids
 
             shootSound = Content.Load<SoundEffect>("shoot");
             explodeSound = Content.Load<SoundEffect>("explode");
+            // destroySound = Content.Load<SoundEffect>("destroy");
 
             SoundEffect music = Content.Load<SoundEffect>("music");
 
@@ -181,7 +182,6 @@ namespace Asteroids
 
                         if (rectBull.Intersects(rectRock))
                         {
-                            
                             int scoreInt = Convert.ToInt32(scoreText);
                             scoreInt++;
 
@@ -193,7 +193,6 @@ namespace Asteroids
 
                             explodeSound.Play(0.1f, 0.0f, 0.0f);
                             
-
                             // Remove rock after 1 second
                         }
 
@@ -205,7 +204,6 @@ namespace Asteroids
                             
                             // Remove rock after 1 second
                         }
-
                     }
 
                     foreach (Bullet bull in bulletsToRemove)
@@ -240,7 +238,7 @@ namespace Asteroids
             {
                 Vector2 welcomeSize = welcomeSprite.MeasureString(welcomeText);
 
-                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.Black, 0, new Vector2(welcomeSize.X / 2, 0), 0.5f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, 0), 0.5f, SpriteEffects.None, 0);
             }
             else
             {
@@ -258,8 +256,8 @@ namespace Asteroids
 
                 ship.Draw(spriteBatch);
 
-                spriteBatch.DrawString(livesSprite, livesText, new Vector2(20, 20), Color.Black, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
-                spriteBatch.DrawString(scoreSprite, scoreText, new Vector2(WIDTH - 20, 20), Color.Black, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(livesSprite, livesText, new Vector2(20, 20), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(scoreSprite, scoreText, new Vector2(WIDTH - 20, 20), Color.White, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
             }
 
             spriteBatch.End();

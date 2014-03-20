@@ -11,8 +11,11 @@ namespace Asteroids
     class Bullet
     {
         private Vector2 bulletPointing;
+
         private float rot, speed;
+
         public Vector2 pos, vel;
+
         public Texture2D bulletSprite;
 
         public Bullet(ContentManager content, Vector2 startingPosition, Vector2 movement, float angle)
@@ -29,7 +32,6 @@ namespace Asteroids
 
         public void Update(GameTime gt)
         {
-            //pos += bulletPointing * speed * (float)gt.ElapsedGameTime.TotalMilliseconds;
             pos += new Vector2((float)Math.Cos(rot) * speed, (float)Math.Sin(rot) * speed);
         }
 

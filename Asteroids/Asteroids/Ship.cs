@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -23,8 +24,7 @@ namespace Asteroids
         private float accelerate = 0.4f;
         private float deccelerate = 0.1f;
 
-        public Vector2 center;
-        public Vector2 barrel;
+        public Vector2 center, barrel;
 
         public Texture2D shipSprite;
 
@@ -37,6 +37,8 @@ namespace Asteroids
         private List<Bullet> bullets = new List<Bullet>();
         
         private int screenWidth, screenHeight;
+
+        private SoundEffect rocketSound;
 
         public Ship(ContentManager content, int WIDTH, int HEIGHT)
         {
@@ -51,10 +53,14 @@ namespace Asteroids
 
             pos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
             vel = new Vector2(0, 0);
+
             center = new Vector2(shipSprite.Width / 2, shipSprite.Height / 2);
             barrel = new Vector2(10 , 10);
+
             screenWidth = WIDTH;
             screenHeight = HEIGHT;
+
+            rocketSound = content.Load<SoundEffect>("rocket");
         }
 
         public void Accelerate()
@@ -81,6 +87,8 @@ namespace Asteroids
     	    {
     	        vel.Y = -6.0f;
     	    }
+
+            rocketSound.Play(0.1f, 0.0f, 0.0f);
         }
 
         public void Decelerate()
@@ -128,12 +136,14 @@ namespace Asteroids
             if (newState.IsKeyDown(Keys.Up))
             {
                 shipDrawSprite = shipBoostSprite;
+
                 Accelerate();
             }
 
             if (newState.IsKeyUp(Keys.Up))
             {
                 shipDrawSprite = shipSprite;
+
                 Decelerate();
             }
 
