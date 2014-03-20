@@ -23,7 +23,8 @@ namespace Asteroids
         private float accelerate = 0.4f;
         private float deccelerate = 0.1f;
 
-        private Vector2 center;
+        public Vector2 center;
+        public Vector2 barrel;
 
         public Texture2D shipSprite;
 
@@ -51,7 +52,7 @@ namespace Asteroids
             pos = new Vector2((WIDTH - shipSprite.Width) / 2, (HEIGHT - shipSprite.Height) / 2);
             vel = new Vector2(0, 0);
             center = new Vector2(shipSprite.Width / 2, shipSprite.Height / 2);
-
+            barrel = new Vector2(10 , 10);
             screenWidth = WIDTH;
             screenHeight = HEIGHT;
         }

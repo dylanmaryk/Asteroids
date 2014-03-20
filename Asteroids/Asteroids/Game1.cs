@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Threading;
 
 namespace Asteroids
 {
@@ -15,9 +16,9 @@ namespace Asteroids
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        
         private int WIDTH, HEIGHT, rockCount;
-
+        
         private Ship ship;
 
         private List<Rock> rocks = new List<Rock>();
@@ -136,11 +137,12 @@ namespace Asteroids
                     foreach (Bullet bull in bullets)
                     {
                         Rectangle rectBull = new Rectangle((int)bull.pos.X, (int)bull.pos.Y, bull.bulletSprite.Width, bull.bulletSprite.Height);
-
+                        
                         bull.Update(gameTime);
 
                         if (rectBull.Intersects(rectRock))
                         {
+                            
                             int scoreInt = Convert.ToInt32(scoreText);
                             scoreInt++;
 
@@ -150,8 +152,19 @@ namespace Asteroids
 
                             rock.rockSprite = Content.Load<Texture2D>("glazed");
                             
+
                             // Remove rock after 1 second
                         }
+
+                        if (bull.bulletRemove(WIDTH, HEIGHT))
+                        {
+                            bulletsToRemove.Add(bull);
+
+                            rock.rockSprite = Content.Load<Texture2D>("glazed");
+                            
+                            // Remove rock after 1 second
+                        }
+
                     }
 
                     foreach (Bullet bull in bulletsToRemove)
@@ -167,7 +180,7 @@ namespace Asteroids
 
                 if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
                 {
-                    Shoot(ship.pos, ship.vel, ship.rot);
+                    Shoot(ship.barrel, ship.vel, ship.rot);
                 }
 
                 oldState = newState;
