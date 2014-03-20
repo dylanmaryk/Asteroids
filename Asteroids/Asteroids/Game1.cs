@@ -17,14 +17,16 @@ namespace Asteroids
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         
-        private int WIDTH, HEIGHT, rockCount;
+        private int WIDTH, HEIGHT, rockCount, livesCount, scoreCount;
         
         private Ship ship;
 
         private List<Rock> rocks = new List<Rock>();
         private List<Bullet> bullets = new List<Bullet>();
 
-        private SpriteFont welcomeSprite, livesSprite, scoreSprite;
+        private Random random;
+
+        private SpriteFont welcomeSprite, livesSprite, scoreSprite, finalScoreSprite;
 
         private String welcomeText, livesText, scoreText;
 
@@ -38,7 +40,7 @@ namespace Asteroids
 
         private KeyboardState oldState;
 
-        private bool welcomeScreenActive;
+        private bool welcomeScreenActive, gameStarted;
         
         public Game1()
         {
@@ -59,6 +61,7 @@ namespace Asteroids
             rockCount = 10;
 
             welcomeScreenActive = true;
+            gameStarted = false;
             
             base.Initialize();
         }
@@ -67,13 +70,17 @@ namespace Asteroids
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            livesCount = 3;
+            scoreCount = 0;
+
             welcomeSprite = Content.Load<SpriteFont>("Courier New");
             livesSprite = welcomeSprite;
             scoreSprite = welcomeSprite;
+            finalScoreSprite = welcomeSprite;
 
             welcomeText = "Press Enter to start the game...";
-            livesText = "3";
-            scoreText = "0";
+            livesText = livesCount.ToString();
+            scoreText = scoreCount.ToString();
 
             background1 = Content.Load<Texture2D>("bg1");
             background2 = Content.Load<Texture2D>("bg2");
@@ -83,7 +90,7 @@ namespace Asteroids
 
             ship = new Ship(Content, WIDTH, HEIGHT);
 
-            Random random = new Random();
+            random = new Random();
 
             for (int i = 0; i < rockCount; i++)
             {
@@ -143,6 +150,7 @@ namespace Asteroids
                 if (state.IsKeyDown(Keys.Enter))
                 {
                     welcomeScreenActive = false;
+                    gameStarted = true;
                 }
             }
             else
@@ -164,10 +172,9 @@ namespace Asteroids
 
                     if (rectRock.Intersects(rectShip))
                     {
-                        int livesInt = Convert.ToInt32(livesText);
-                        livesInt--;
+                        livesCount--;
 
-                        livesText = livesInt.ToString();
+                        livesText = livesCount.ToString();
                         
                         rocksToRemove.Add(rock);
                     }
@@ -182,27 +189,21 @@ namespace Asteroids
 
                         if (rectBull.Intersects(rectRock))
                         {
-                            int scoreInt = Convert.ToInt32(scoreText);
-                            scoreInt++;
+                            scoreCount++;
 
-                            scoreText = scoreInt.ToString();
+                            scoreText = scoreCount.ToString();
 
                             bulletsToRemove.Add(bull);
 
                             rock.rockSprite = Content.Load<Texture2D>("glazed");
+                            rock.hitWithBullet = true;
 
                             explodeSound.Play(0.1f, 0.0f, 0.0f);
-                            
-                            // Remove rock after 1 second
                         }
 
                         if (bull.bulletRemove(WIDTH, HEIGHT))
                         {
                             bulletsToRemove.Add(bull);
-
-                            rock.rockSprite = Content.Load<Texture2D>("glazed");
-                            
-                            // Remove rock after 1 second
                         }
                     }
 
@@ -210,11 +211,26 @@ namespace Asteroids
                     {
                         bullets.Remove(bull);
                     }
+
+                    if (rock.hitWithBullet)
+                    {
+                        rock.timer--;
+
+                        if (rock.timer <= 0)
+                        {
+                            rocksToRemove.Add(rock);
+                        }
+                    }
                 }
 
                 foreach (Rock rock in rocksToRemove)
                 {
                     rocks.Remove(rock);
+                    
+                    for (int i = 0; i < 2; i++)
+                    {
+                        rocks.Add(new Rock(Content, WIDTH, HEIGHT, random));
+                    }
                 }
 
                 if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
@@ -223,6 +239,24 @@ namespace Asteroids
                 }
 
                 oldState = newState;
+
+                if (livesCount <= 0)
+                {
+                    welcomeScreenActive = true;
+
+                    livesCount = 3;
+                    scoreCount = 0;
+
+                    ship = new Ship(Content, WIDTH, HEIGHT);
+
+                    rocks = new List<Rock>();
+                    bullets = new List<Bullet>();
+
+                    for (int i = 0; i < rockCount; i++)
+                    {
+                        rocks.Add(new Rock(Content, WIDTH, HEIGHT, random));
+                    }
+                }
             }
 
             base.Update(gameTime);
@@ -238,7 +272,16 @@ namespace Asteroids
             {
                 Vector2 welcomeSize = welcomeSprite.MeasureString(welcomeText);
 
-                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, 0), 0.5f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, welcomeSize.Y / 2), 0.5f, SpriteEffects.None, 0);
+
+                if (gameStarted)
+                {
+                    String finalScoreText = "Your final score: " + scoreText;
+
+                    Vector2 finalScoreSize = finalScoreSprite.MeasureString(finalScoreText);
+
+                    spriteBatch.DrawString(finalScoreSprite, finalScoreText, new Vector2(WIDTH / 2, HEIGHT / 2 + 50), Color.White, 0, new Vector2(finalScoreSize.X / 2, finalScoreSize.Y / 2), 0.5f, SpriteEffects.None, 0);
+                }
             }
             else
             {

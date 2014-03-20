@@ -22,6 +22,10 @@ namespace Asteroids
 
         public Vector2 pos;
 
+        public bool hitWithBullet;
+
+        public int timer;
+
         public Rock(ContentManager content, int WIDTH, int HEIGHT, Random random)
         {
             // rockSprite = content.Load<Texture2D>("meteorSmall");
@@ -31,7 +35,7 @@ namespace Asteroids
             {
                 pos = new Vector2(random.Next(0, WIDTH), random.Next(0, HEIGHT));
             }
-            while (pos.X > WIDTH / 8 && pos.X < WIDTH * 7 && pos.Y > HEIGHT / 8 && pos.Y < HEIGHT * 7);
+            while (pos.X > WIDTH / 10 && pos.X < WIDTH * 9 && pos.Y > HEIGHT / 10 && pos.Y < HEIGHT * 9);
 
             center = new Vector2(rockSprite.Width / 2, rockSprite.Height / 2);
 
@@ -49,6 +53,10 @@ namespace Asteroids
             
             screenWidth = WIDTH;
             screenHeight = HEIGHT;
+
+            hitWithBullet = false;
+
+            timer = 10;
         }
 
         public void Update(Edges edges)
