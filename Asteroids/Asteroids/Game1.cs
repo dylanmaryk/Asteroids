@@ -27,6 +27,14 @@ namespace Asteroids
 
         private String welcomeText, livesText, scoreText;
 
+        private Texture2D background1;
+        private Texture2D background2;
+
+        private Rectangle backgroundRect1;
+        private Rectangle backgroundRect2;
+
+        private SoundEffect shootSound, explodeSound;
+
         private KeyboardState oldState;
 
         private bool welcomeScreenActive;
@@ -66,6 +74,12 @@ namespace Asteroids
             livesText = "3";
             scoreText = "0";
 
+            background1 = Content.Load<Texture2D>("bg1");
+            background2 = Content.Load<Texture2D>("bg2");
+
+            backgroundRect1 = new Rectangle(0, 0, WIDTH, HEIGHT);
+            backgroundRect2 = new Rectangle(-WIDTH, 0, WIDTH, HEIGHT);
+
             ship = new Ship(Content, WIDTH, HEIGHT);
 
             Random random = new Random();
@@ -74,6 +88,16 @@ namespace Asteroids
             {
                 rocks.Add(new Rock(Content, WIDTH, HEIGHT, random));
             }
+
+            shootSound = Content.Load<SoundEffect>("shoot");
+            explodeSound = Content.Load<SoundEffect>("explode");
+
+            SoundEffect music = Content.Load<SoundEffect>("music");
+
+            SoundEffectInstance instance = music.CreateInstance();
+            instance.IsLooped = true;
+
+            music.Play(0.1f, 0.0f, 0.0f);
         }
 
         protected override void UnloadContent()
@@ -90,11 +114,26 @@ namespace Asteroids
             if (bullets.Count() < 20)
             {
                 bullets.Add(bull);
+
+                shootSound.Play(0.1f, 0.0f, 0.0f);
             }
         }
 
         protected override void Update(GameTime gameTime)
         {
+            backgroundRect1.X += 1;
+            backgroundRect2.X += 1;
+
+            if (backgroundRect1.X == WIDTH)
+            {
+                backgroundRect1.X = -WIDTH;
+            }
+
+            if (backgroundRect2.X == WIDTH)
+            {
+                backgroundRect2.X = -WIDTH;
+            }
+            
             if (welcomeScreenActive)
             {
                 KeyboardState state = Keyboard.GetState();
@@ -149,6 +188,8 @@ namespace Asteroids
                             bulletsToRemove.Add(bull);
 
                             rock.rockSprite = Content.Load<Texture2D>("glazed");
+
+                            explodeSound.Play(0.1f, 0.0f, 0.0f);
                             
                             // Remove rock after 1 second
                         }
@@ -178,15 +219,15 @@ namespace Asteroids
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin();
+            spriteBatch.Draw(background1, backgroundRect1, Color.White);
+            spriteBatch.Draw(background2, backgroundRect2, Color.White);
 
             if (welcomeScreenActive)
             {
                 Vector2 welcomeSize = welcomeSprite.MeasureString(welcomeText);
 
-                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, 0), 0.5f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.Black, 0, new Vector2(welcomeSize.X / 2, 0), 0.5f, SpriteEffects.None, 0);
             }
             else
             {
@@ -204,8 +245,8 @@ namespace Asteroids
 
                 ship.Draw(spriteBatch);
 
-                spriteBatch.DrawString(livesSprite, livesText, new Vector2(20, 20), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
-                spriteBatch.DrawString(scoreSprite, scoreText, new Vector2(WIDTH - 20, 20), Color.White, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(livesSprite, livesText, new Vector2(20, 20), Color.Black, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(scoreSprite, scoreText, new Vector2(WIDTH - 20, 20), Color.Black, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
             }
 
             spriteBatch.End();
