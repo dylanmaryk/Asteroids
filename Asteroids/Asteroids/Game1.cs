@@ -26,9 +26,9 @@ namespace Asteroids
 
         private Random random;
 
-        private SpriteFont welcomeSprite, livesSprite, scoreSprite, finalScoreSprite;
+        private SpriteFont fontSprite;
 
-        private String welcomeText, livesText, scoreText;
+        private String welcomeText, livesText, scoreText, finalScoreText;
 
         private Texture2D background1;
         private Texture2D background2;
@@ -73,10 +73,7 @@ namespace Asteroids
             livesCount = 3;
             scoreCount = 0;
 
-            welcomeSprite = Content.Load<SpriteFont>("Courier New");
-            livesSprite = welcomeSprite;
-            scoreSprite = welcomeSprite;
-            finalScoreSprite = welcomeSprite;
+            fontSprite = Content.Load<SpriteFont>("Courier New");
 
             welcomeText = "Press Enter to start the game...";
             livesText = livesCount.ToString();
@@ -244,8 +241,13 @@ namespace Asteroids
                 {
                     welcomeScreenActive = true;
 
+                    finalScoreText = "Your final score: " + scoreText;
+
                     livesCount = 3;
                     scoreCount = 0;
+
+                    livesText = livesCount.ToString();
+                    scoreText = scoreCount.ToString();
 
                     ship = new Ship(Content, WIDTH, HEIGHT);
 
@@ -270,22 +272,20 @@ namespace Asteroids
 
             if (welcomeScreenActive)
             {
-                Vector2 welcomeSize = welcomeSprite.MeasureString(welcomeText);
+                Vector2 welcomeSize = fontSprite.MeasureString(welcomeText);
 
-                spriteBatch.DrawString(welcomeSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, welcomeSize.Y / 2), 0.5f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(fontSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, welcomeSize.Y / 2), 0.5f, SpriteEffects.None, 0);
 
                 if (gameStarted)
                 {
-                    String finalScoreText = "Your final score: " + scoreText;
+                    Vector2 finalScoreSize = fontSprite.MeasureString(finalScoreText);
 
-                    Vector2 finalScoreSize = finalScoreSprite.MeasureString(finalScoreText);
-
-                    spriteBatch.DrawString(finalScoreSprite, finalScoreText, new Vector2(WIDTH / 2, HEIGHT / 2 + 50), Color.White, 0, new Vector2(finalScoreSize.X / 2, finalScoreSize.Y / 2), 0.5f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(fontSprite, finalScoreText, new Vector2(WIDTH / 2, HEIGHT / 2 + 50), Color.White, 0, new Vector2(finalScoreSize.X / 2, finalScoreSize.Y / 2), 0.5f, SpriteEffects.None, 0);
                 }
             }
             else
             {
-                Vector2 scoreSize = scoreSprite.MeasureString(scoreText);
+                Vector2 scoreSize = fontSprite.MeasureString(scoreText);
                 
                 foreach (Rock rock in rocks)
                 {
@@ -299,8 +299,8 @@ namespace Asteroids
 
                 ship.Draw(spriteBatch);
 
-                spriteBatch.DrawString(livesSprite, livesText, new Vector2(20, 20), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
-                spriteBatch.DrawString(scoreSprite, scoreText, new Vector2(WIDTH - 20, 20), Color.White, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(fontSprite, livesText, new Vector2(20, 20), Color.White, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(fontSprite, scoreText, new Vector2(WIDTH - 20, 20), Color.White, 0, new Vector2(scoreSize.X, 0), 1, SpriteEffects.None, 0);
             }
 
             spriteBatch.End();
