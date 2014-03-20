@@ -81,9 +81,9 @@ namespace Asteroids
             // TODO: Unload any non ContentManager content here
         }
 
-        public void Shoot()
+        private void Shoot(Vector2 startingPosition, Vector2 movement, float angle)
         {
-            Bullet bull = new Bullet(Content, ship.pos, ship.vel, ship.rot);
+            Bullet bull = new Bullet(Content, startingPosition, movement, angle);
             bull.vel = new Vector2((float)Math.Cos(ship.rot), (float)Math.Sin(ship.rot)) * 5f + ship.vel;
             bull.pos = ship.pos + bull.vel * 5;
 
@@ -167,7 +167,7 @@ namespace Asteroids
 
                 if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
                 {
-                    Shoot();
+                    Shoot(ship.pos, ship.vel, ship.rot);
                 }
 
                 oldState = newState;
