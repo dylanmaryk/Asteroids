@@ -24,7 +24,7 @@ namespace Asteroids
             bulletSprite = content.Load<Texture2D>("bullet");
 
             pos = startingPosition;
-            bulletPointing = movement;
+            bulletPointing = movement + new Vector2(-15, 45);
 
             rot = angle - (float)MathHelper.PiOver2;
             speed = 1.0f;
