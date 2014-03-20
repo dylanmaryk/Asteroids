@@ -131,6 +131,8 @@ namespace Asteroids
                         rocksToRemove.Add(rock);
                     }
 
+                    List<Bullet> bulletsToRemove = new List<Bullet>();
+
                     foreach (Bullet bull in bullets)
                     {
                         Rectangle rectBull = new Rectangle((int)bull.pos.X, (int)bull.pos.Y, bull.bulletSprite.Width, bull.bulletSprite.Height);
@@ -144,10 +146,17 @@ namespace Asteroids
 
                             scoreText = scoreInt.ToString();
 
+                            bulletsToRemove.Add(bull);
+
                             rock.rockSprite = Content.Load<Texture2D>("glazed");
                             
                             // Remove rock after 1 second
                         }
+                    }
+
+                    foreach (Bullet bull in bulletsToRemove)
+                    {
+                        bullets.Remove(bull);
                     }
                 }
 
