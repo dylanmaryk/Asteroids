@@ -139,7 +139,14 @@ namespace Asteroids
 
                         if (rectBull.Intersects(rectRock))
                         {
-                            // Change rock sprite to glazed, set to be removed after 1 second, earn a point
+                            int scoreInt = Convert.ToInt32(scoreText);
+                            scoreInt++;
+
+                            scoreText = scoreInt.ToString();
+
+                            rock.rockSprite = Content.Load<Texture2D>("glazed");
+                            
+                            // Remove rock after 1 second
                         }
                     }
                 }
