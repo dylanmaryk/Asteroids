@@ -62,6 +62,11 @@ namespace Asteroids
             instanceRocket.Volume = 0.15f;
         }
 
+        public Vector2 getVel()
+        {
+            return vel;
+        }
+
         public void Accelerate()
         {
             vel.X = vel.X + (float)(Math.Cos(rot - Math.PI / 2) * accelerate);
