@@ -76,8 +76,8 @@ namespace Asteroids
             fontSprite = Content.Load<SpriteFont>("Courier New");
 
             welcomeText = "Press Enter to start the game...";
-            livesText = livesCount.ToString();
-            scoreText = scoreCount.ToString();
+            livesText = "lives: " + livesCount.ToString();
+            scoreText = "score: " + scoreCount.ToString();
 
             background1 = Content.Load<Texture2D>("bg1");
             background2 = Content.Load<Texture2D>("bg2");
@@ -171,7 +171,7 @@ namespace Asteroids
                     {
                         livesCount--;
 
-                        livesText = livesCount.ToString();
+                        livesText = "lives: " + livesCount.ToString();
                         
                         rocksToRemove.Add(rock);
                     }
@@ -188,7 +188,7 @@ namespace Asteroids
                         {
                             scoreCount++;
 
-                            scoreText = scoreCount.ToString();
+                            scoreText = "score: " + scoreCount.ToString();
 
                             bulletsToRemove.Add(bull);
 
@@ -246,8 +246,8 @@ namespace Asteroids
                     livesCount = 3;
                     scoreCount = 0;
 
-                    livesText = livesCount.ToString();
-                    scoreText = scoreCount.ToString();
+                    livesText = "lives: " + livesCount.ToString();
+                    scoreText = "score: " + scoreCount.ToString();
 
                     ship = new Ship(Content, WIDTH, HEIGHT);
 
@@ -274,13 +274,13 @@ namespace Asteroids
             {
                 Vector2 welcomeSize = fontSprite.MeasureString(welcomeText);
 
-                spriteBatch.DrawString(fontSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, welcomeSize.Y / 2), 0.5f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(fontSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, welcomeSize.Y / 2), 1f, SpriteEffects.None, 0);
 
                 if (gameStarted)
                 {
                     Vector2 finalScoreSize = fontSprite.MeasureString(finalScoreText);
 
-                    spriteBatch.DrawString(fontSprite, finalScoreText, new Vector2(WIDTH / 2, HEIGHT / 2 + 50), Color.White, 0, new Vector2(finalScoreSize.X / 2, finalScoreSize.Y / 2), 0.5f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(fontSprite, finalScoreText, new Vector2(WIDTH / 2, HEIGHT / 2 + 50), Color.White, 0, new Vector2(finalScoreSize.X / 2, finalScoreSize.Y / 2), 0.8f, SpriteEffects.None, 0);
                 }
             }
             else

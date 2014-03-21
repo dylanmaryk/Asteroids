@@ -21,8 +21,8 @@ namespace Asteroids
 
         private Texture2D shipDrawSprite, shipBoostSprite;
 
-        private float accelerate = 0.04f;
-        private float deccelerate = 0.01f;
+        private float accelerate = 0.06f;
+        private float deccelerate = 0.03f;
 
         public Vector2 center, barrel;
 
