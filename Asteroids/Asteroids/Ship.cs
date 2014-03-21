@@ -29,8 +29,6 @@ namespace Asteroids
         public float rot;
 
         public Vector2 pos, vel;
-
-        //private List<Bullet> bullets = new List<Bullet>();
         
         private int screenWidth, screenHeight;
 
@@ -121,12 +119,12 @@ namespace Asteroids
 
             if (newState.IsKeyDown(Keys.Right))
             {
-                rot += 0.03f;
+                rot += 0.1f;
             }
 
             if (newState.IsKeyDown(Keys.Left))
             {
-                rot -= 0.03f;
+                rot -= 0.1f;
             }         
             
             if (newState.IsKeyDown(Keys.Up))

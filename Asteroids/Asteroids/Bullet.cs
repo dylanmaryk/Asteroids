@@ -27,7 +27,7 @@ namespace Asteroids
             bulletPointing = movement + new Vector2(-15, 45);
 
             rot = angle - (float)MathHelper.PiOver2;
-            speed = 1.0f;
+            speed = 0.8f;
         }
 
         public void Update(GameTime gt)

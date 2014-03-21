@@ -32,9 +32,11 @@ namespace Asteroids
 
         private Texture2D background1;
         private Texture2D background2;
+        private Texture2D backgroundWelcome;
 
         private Rectangle backgroundRect1;
         private Rectangle backgroundRect2;
+        private Rectangle backgroundRectWelcome;
 
         private SoundEffect shootSound, explodeSound, destroySound;
 
@@ -81,9 +83,11 @@ namespace Asteroids
 
             background1 = Content.Load<Texture2D>("bg1");
             background2 = Content.Load<Texture2D>("bg2");
+            backgroundWelcome = Content.Load<Texture2D>("bgWelcome");
 
             backgroundRect1 = new Rectangle(0, 0, WIDTH, HEIGHT);
             backgroundRect2 = new Rectangle(-WIDTH, 0, WIDTH, HEIGHT);
+            backgroundRectWelcome = backgroundRect1;
 
             ship = new Ship(Content, WIDTH, HEIGHT);
 
@@ -127,19 +131,6 @@ namespace Asteroids
 
         protected override void Update(GameTime gameTime)
         {
-            backgroundRect1.X += 1;
-            backgroundRect2.X += 1;
-
-            if (backgroundRect1.X == WIDTH)
-            {
-                backgroundRect1.X = -WIDTH;
-            }
-
-            if (backgroundRect2.X == WIDTH)
-            {
-                backgroundRect2.X = -WIDTH;
-            }
-            
             if (welcomeScreenActive)
             {
                 KeyboardState state = Keyboard.GetState();
@@ -152,6 +143,19 @@ namespace Asteroids
             }
             else
             {
+                backgroundRect1.X += 1;
+                backgroundRect2.X += 1;
+
+                if (backgroundRect1.X == WIDTH)
+                {
+                    backgroundRect1.X = -WIDTH;
+                }
+
+                if (backgroundRect2.X == WIDTH)
+                {
+                    backgroundRect2.X = -WIDTH;
+                }
+                
                 KeyboardState newState = Keyboard.GetState();
 
                 Edges edges = new Edges();
@@ -267,24 +271,27 @@ namespace Asteroids
         protected override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(background1, backgroundRect1, Color.White);
-            spriteBatch.Draw(background2, backgroundRect2, Color.White);
 
             if (welcomeScreenActive)
             {
+                spriteBatch.Draw(backgroundWelcome, backgroundRectWelcome, Color.White);
+                
                 Vector2 welcomeSize = fontSprite.MeasureString(welcomeText);
 
-                spriteBatch.DrawString(fontSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 2), Color.White, 0, new Vector2(welcomeSize.X / 2, welcomeSize.Y / 2), 1f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(fontSprite, welcomeText, new Vector2(WIDTH / 2, HEIGHT / 4 * 3), Color.White, 0, new Vector2(welcomeSize.X / 2, welcomeSize.Y / 2), 1f, SpriteEffects.None, 0);
 
                 if (gameStarted)
                 {
                     Vector2 finalScoreSize = fontSprite.MeasureString(finalScoreText);
 
-                    spriteBatch.DrawString(fontSprite, finalScoreText, new Vector2(WIDTH / 2, HEIGHT / 2 + 50), Color.White, 0, new Vector2(finalScoreSize.X / 2, finalScoreSize.Y / 2), 0.8f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(fontSprite, finalScoreText, new Vector2(WIDTH / 2, HEIGHT / 4 * 3 + 50), Color.White, 0, new Vector2(finalScoreSize.X / 2, finalScoreSize.Y / 2), 0.8f, SpriteEffects.None, 0);
                 }
             }
             else
             {
+                spriteBatch.Draw(background1, backgroundRect1, Color.White);
+                spriteBatch.Draw(background2, backgroundRect2, Color.White);
+                
                 Vector2 scoreSize = fontSprite.MeasureString(scoreText);
                 
                 foreach (Rock rock in rocks)
