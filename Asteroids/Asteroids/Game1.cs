@@ -52,6 +52,8 @@ namespace Asteroids
 
             IsMouseVisible = true;
 
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1024;
             // graphics.ToggleFullScreen(); // FULL SCREEEEEEEEEN
             graphics.ApplyChanges();
         }
@@ -72,7 +74,7 @@ namespace Asteroids
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            livesCount = 3;
+            livesCount = 10;
             scoreCount = 0;
 
             fontSprite = Content.Load<SpriteFont>("Courier New");
@@ -249,7 +251,7 @@ namespace Asteroids
 
                     finalScoreText = "Your final score: " + scoreText;
 
-                    livesCount = 3;
+                    livesCount = 10;
                     scoreCount = 0;
 
                     livesText = "lives: " + livesCount.ToString();
