@@ -26,7 +26,7 @@ namespace Asteroids
 
         public int timer;
 
-        public Rock(ContentManager content, int WIDTH, int HEIGHT, Random random)
+        public Rock(ContentManager content, int WIDTH, int HEIGHT, Random random, Vector2 shipPos)
         {
             // rockSprite = content.Load<Texture2D>("meteorSmall");
             rockSprite = content.Load<Texture2D>("donut");
@@ -35,7 +35,8 @@ namespace Asteroids
             {
                 pos = new Vector2(random.Next(0, WIDTH), random.Next(0, HEIGHT));
             }
-            while (pos.X > WIDTH / 5 && pos.X < WIDTH / 5 * 4 && pos.X < 100 && pos.X < WIDTH - 100 && pos.Y > HEIGHT / 5 && pos.Y < HEIGHT / 5 * 4 && pos.Y < 100 && pos.Y < HEIGHT - 100);
+            // while (pos.X > WIDTH / 5 && pos.X < WIDTH / 5 * 4 && pos.X < 100 && pos.X < WIDTH - 100 && pos.Y > HEIGHT / 5 && pos.Y < HEIGHT / 5 * 4 && pos.Y < 100 && pos.Y < HEIGHT - 100);
+            while (pos.X > shipPos.X - 300 && pos.X < shipPos.X + 300 && pos.Y > shipPos.Y - 300 && pos.Y < shipPos.Y + 300);
 
             center = new Vector2(rockSprite.Width / 2, rockSprite.Height / 2);
 
@@ -50,8 +51,8 @@ namespace Asteroids
 
             do
             {
-                xVel = (int)(random.Next(-3, 3) * 0.1f);
-                yVel = (int)(random.Next(-3, 3) * 0.1f);
+                xVel = (int)(random.Next(-10, 10) * 0.2f);
+                yVel = (int)(random.Next(-10, 10) * 0.2f);
             }
             while (xVel == 0 || yVel == 0);
             

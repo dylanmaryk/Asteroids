@@ -97,7 +97,7 @@ namespace Asteroids
 
             for (int i = 0; i < rockCount; i++)
             {
-                rocks.Add(new Rock(Content, WIDTH, HEIGHT, random));
+                rocks.Add(new Rock(Content, WIDTH, HEIGHT, random, ship.pos));
             }
 
             shootSound = Content.Load<SoundEffect>("shoot");
@@ -133,6 +133,19 @@ namespace Asteroids
 
         protected override void Update(GameTime gameTime)
         {
+            backgroundRect1.X += 1;
+            backgroundRect2.X += 1;
+
+            if (backgroundRect1.X == WIDTH)
+            {
+                backgroundRect1.X = -WIDTH;
+            }
+
+            if (backgroundRect2.X == WIDTH)
+            {
+                backgroundRect2.X = -WIDTH;
+            }
+            
             if (welcomeScreenActive)
             {
                 KeyboardState state = Keyboard.GetState();
@@ -145,19 +158,6 @@ namespace Asteroids
             }
             else
             {
-                backgroundRect1.X += 1;
-                backgroundRect2.X += 1;
-
-                if (backgroundRect1.X == WIDTH)
-                {
-                    backgroundRect1.X = -WIDTH;
-                }
-
-                if (backgroundRect2.X == WIDTH)
-                {
-                    backgroundRect2.X = -WIDTH;
-                }
-                
                 KeyboardState newState = Keyboard.GetState();
 
                 Edges edges = new Edges();
@@ -234,7 +234,7 @@ namespace Asteroids
                     
                     for (int i = 0; i < 2; i++)
                     {
-                        rocks.Add(new Rock(Content, WIDTH, HEIGHT, random));
+                        rocks.Add(new Rock(Content, WIDTH, HEIGHT, random, ship.pos));
                     }
                 }
 
@@ -264,7 +264,7 @@ namespace Asteroids
 
                     for (int i = 0; i < rockCount; i++)
                     {
-                        rocks.Add(new Rock(Content, WIDTH, HEIGHT, random));
+                        rocks.Add(new Rock(Content, WIDTH, HEIGHT, random, ship.pos));
                     }
                 }
             }
@@ -275,6 +275,8 @@ namespace Asteroids
         protected override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
+            spriteBatch.Draw(background1, backgroundRect1, Color.White);
+            spriteBatch.Draw(background2, backgroundRect2, Color.White);
 
             if (welcomeScreenActive)
             {
@@ -293,9 +295,6 @@ namespace Asteroids
             }
             else
             {
-                spriteBatch.Draw(background1, backgroundRect1, Color.White);
-                spriteBatch.Draw(background2, backgroundRect2, Color.White);
-                
                 Vector2 scoreSize = fontSprite.MeasureString(scoreText);
                 
                 foreach (Rock rock in rocks)
