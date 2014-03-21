@@ -109,7 +109,7 @@ namespace Asteroids
             SoundEffectInstance instanceMusic = music.CreateInstance();
             instanceMusic.IsLooped = true;
 
-            music.Play(0.1f, 0.0f, 0.0f);
+            music.Play(0.5f, 0.0f, 0.0f);
         }
 
         protected override void UnloadContent()
@@ -127,7 +127,7 @@ namespace Asteroids
             {
                 bullets.Add(bull);
 
-                shootSound.Play(0.1f, 0.0f, 0.0f);
+                shootSound.Play(0.25f, 0.0f, 0.0f);
             }
         }
 
@@ -203,7 +203,7 @@ namespace Asteroids
                             rock.rockSprite = Content.Load<Texture2D>("glazed");
                             rock.hitWithBullet = true;
 
-                            explodeSound.Play(0.1f, 0.0f, 0.0f);
+                            explodeSound.Play(0.25f, 0.0f, 0.0f);
                         }
 
                         if (bull.bulletRemove(WIDTH, HEIGHT))

@@ -59,7 +59,7 @@ namespace Asteroids
             rocketSound = content.Load<SoundEffect>("rocket");
 
             instanceRocket = rocketSound.CreateInstance();
-            instanceRocket.Volume = 0.15f;
+            instanceRocket.Volume = 0.30f;
         }
 
         public void Accelerate()
