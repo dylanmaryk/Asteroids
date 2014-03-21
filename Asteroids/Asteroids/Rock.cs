@@ -48,8 +48,8 @@ namespace Asteroids
                 rotRight = false;
             }
 
-            xVel = random.Next(-1, 1);
-            yVel = random.Next(-1, 1);
+            xVel = (int)(random.Next(-10, 10) * 0.1f);
+            yVel = (int)(random.Next(-10, 10) * 0.1f);
             
             screenWidth = WIDTH;
             screenHeight = HEIGHT;

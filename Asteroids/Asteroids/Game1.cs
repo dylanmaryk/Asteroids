@@ -100,12 +100,12 @@ namespace Asteroids
 
             shootSound = Content.Load<SoundEffect>("shoot");
             explodeSound = Content.Load<SoundEffect>("explode");
-            // destroySound = Content.Load<SoundEffect>("destroy");
+            destroySound = Content.Load<SoundEffect>("destroy");
 
             SoundEffect music = Content.Load<SoundEffect>("music");
 
-            SoundEffectInstance instance = music.CreateInstance();
-            instance.IsLooped = true;
+            SoundEffectInstance instanceMusic = music.CreateInstance();
+            instanceMusic.IsLooped = true;
 
             music.Play(0.1f, 0.0f, 0.0f);
         }
@@ -178,6 +178,8 @@ namespace Asteroids
                         livesText = "lives: " + livesCount.ToString();
                         
                         rocksToRemove.Add(rock);
+
+                        destroySound.Play(0.75f, 0.0f, 0.0f);
                     }
 
                     List<Bullet> bulletsToRemove = new List<Bullet>();

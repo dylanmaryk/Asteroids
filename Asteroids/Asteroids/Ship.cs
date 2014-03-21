@@ -34,6 +34,8 @@ namespace Asteroids
 
         private SoundEffect rocketSound;
 
+        private SoundEffectInstance instanceRocket;
+
         public Ship(ContentManager content, int WIDTH, int HEIGHT)
         {
             // shipSprite = content.Load<Texture2D>("player");
@@ -55,6 +57,9 @@ namespace Asteroids
             screenHeight = HEIGHT;
 
             rocketSound = content.Load<SoundEffect>("rocket");
+
+            instanceRocket = rocketSound.CreateInstance();
+            instanceRocket.Volume = 0.15f;
         }
 
         public void Accelerate()
@@ -82,7 +87,7 @@ namespace Asteroids
     	        vel.Y = -6.0f;
     	    }
 
-            rocketSound.Play(0.1f, 0.0f, 0.0f);
+            instanceRocket.Play();
         }
 
         public void Decelerate()
@@ -106,6 +111,8 @@ namespace Asteroids
             {
                 vel.Y = vel.Y - deccelerate;
             }
+
+            instanceRocket.Pause();
         }
 
         public void Update(Edges edges)
