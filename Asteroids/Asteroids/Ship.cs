@@ -8,10 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-/* Don't plagiarize me bro:
- * -Rotation source: http://www.dreamincode.net/forums/topic/83924-xna-user-controlled-object-rotation-2d/
- * -Speed up/brake source: http://www.dreamincode.net/forums/topic/101358-xna-30-game-tutorial-part-3/ 
-*/
+
 
 namespace Asteroids
 {
@@ -60,6 +57,11 @@ namespace Asteroids
 
             instanceRocket = rocketSound.CreateInstance();
             instanceRocket.Volume = 0.30f;
+        }
+
+        public Vector2 getVel()
+        {
+            return vel;
         }
 
         public void Accelerate()

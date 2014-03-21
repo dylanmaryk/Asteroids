@@ -18,7 +18,7 @@ namespace Asteroids
 
         public Texture2D bulletSprite;
 
-        public Bullet(ContentManager content, Vector2 startingPosition, Vector2 movement, float angle)
+        public Bullet(ContentManager content, Vector2 startingPosition, Vector2 movement, float angle, Vector2 shipSpeed)
         {
             // bulletSprite = content.Load<Texture2D>("bulletTest");
             bulletSprite = content.Load<Texture2D>("bullet");
@@ -27,7 +27,7 @@ namespace Asteroids
             bulletPointing = movement + new Vector2(-15, 45);
 
             rot = angle - (float)MathHelper.PiOver2;
-            speed = 0.4f;
+            speed =  0.4f;
         }
 
         public void Update(GameTime gt)
