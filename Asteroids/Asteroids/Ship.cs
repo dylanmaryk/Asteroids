@@ -8,10 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-/* Don't plagiarize me bro:
- * -Rotation source: http://www.dreamincode.net/forums/topic/83924-xna-user-controlled-object-rotation-2d/
- * -Speed up/brake source: http://www.dreamincode.net/forums/topic/101358-xna-30-game-tutorial-part-3/ 
-*/
+
 
 namespace Asteroids
 {
