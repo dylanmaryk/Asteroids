@@ -17,8 +17,6 @@ namespace Asteroids
 {
     class Ship
     {
-        // Ship stuff
-
         private Texture2D shipDrawSprite, shipBoostSprite;
 
         private float accelerate = 0.06f;
@@ -32,9 +30,7 @@ namespace Asteroids
 
         public Vector2 pos, vel;
 
-        // Bullet stuff
-
-        private List<Bullet> bullets = new List<Bullet>();
+        //private List<Bullet> bullets = new List<Bullet>();
         
         private int screenWidth, screenHeight;
 
